@@ -2,6 +2,7 @@ from configparser import ConfigParser
 import os
 import requests
 import time
+import logging
 from envirophat import weather,light
 
 config_object = ConfigParser()
@@ -10,14 +11,17 @@ config_object.read("config.ini")
 monitorconfig = config_object["MONITORCONFIG"]
 prtgconfig = config_object["PRTGCONFIG"]
 
-print("Starting Sensor")
-print("")
-print("Current Config Settings:")
-print("Monitor Config")
-print("Data send interval: {} seconds").format(monitorconfig["datasendinterval"])
-print("")
-print("PRTG Config")
-print("")
+logtime = str.replace(str(time.time()), ".", "-")
+logging.basicConfig(filename="logfilename" + logtime + ".log", level=logging.INFO)
+
+logging.info("Starting Sensor")
+logging.info("")
+logging.info("Current Config Settings:")
+logging.info("Monitor Config")
+logging.info("Data send interval: {} seconds").format(monitorconfig["datasendinterval"])
+logging.info("")
+logging.info("PRTG Config")
+logging.info("")
 
 def get_values():
     temperature = weather.temperature()
@@ -55,18 +59,19 @@ try:
             json_string = str.replace(json_string, '\'', '\"')
             prtg_request_URL = 'https://' + prtgconfig["prtgserverhost"] + ':' + prtgconfig["prtgserverport"] + '/' + prtgconfig["prtgsensortoken"] + "?content=" + json_string
             if str(monitorconfig['debugenabled']) == '1':
-                print(json_response)
-                print(json_string)
-                print(prtg_request_URL)
+                logging.debug(json_response)
+                logging.debug(json_string)
+                logging.debug(prtg_request_URL)
             else:
                 pass
             request = requests.get(prtg_request_URL)
             if str(monitorconfig['debugenabled']) == '1':
-                print(request.status_code)
+                logging.debug(request.status_code)
             
         except:
+            
             pass
-        time.sleep(prtgconfig["datasendinterval"])
+        time.sleep(int(prtgconfig["datasendinterval"]))
 
 except KeyboardInterrupt:
     pass
