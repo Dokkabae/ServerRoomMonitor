@@ -2,6 +2,7 @@
 
 ## PRTG RaspberryPi Server Room Sensor
 
-### Contains:
+### Contains
+
 - Matrix Orbital LCD display support
 - Easily configurable settings
