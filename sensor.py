@@ -16,6 +16,8 @@ logging.basicConfig(filename="logfilename" + logtime + ".log", level=logging.INF
 
 logging.info("Starting Sensor")
 logging.info("")
+logging.info("Current Unix Epoch Time:")
+logging.info("")
 logging.info("Current Config Settings:")
 logging.info("Monitor Config")
 logging.info("Data send interval: {} seconds").format(monitorconfig["datasendinterval"])
