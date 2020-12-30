@@ -6,3 +6,4 @@
 
 - Matrix Orbital LCD display support
 - Easily configurable settings
+- Logging!

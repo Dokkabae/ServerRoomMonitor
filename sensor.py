@@ -14,16 +14,17 @@ prtgconfig = config_object["PRTGCONFIG"]
 logtime = str.replace(str(time.time()), ".", "-")
 logging.basicConfig(filename="logfilename" + logtime + ".log", level=logging.INFO)
 
-logging.info("Starting Sensor")
-logging.info("")
-logging.info("Current Unix Epoch Time:")
-logging.info("")
-logging.info("Current Config Settings:")
-logging.info("Monitor Config")
-logging.info("Data send interval: {} seconds").format(monitorconfig["datasendinterval"])
-logging.info("")
-logging.info("PRTG Config")
-logging.info("")
+logging.info("""Starting Sensor
+
+Current Unix Epoch Time: 
+{}
+
+Current Config Settings:
+Monitor Config
+Data send interval: {} seconds
+
+PRTG Config
+""").format(logtime, monitorconfig["datasendinterval"])
 
 def get_values():
     temperature = weather.temperature()
