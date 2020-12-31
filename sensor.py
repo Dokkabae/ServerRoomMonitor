@@ -3,6 +3,9 @@ import os
 import requests
 import time
 import logging
+import serial
+import asyncio
+from serial.serialutil import Timeout
 from envirophat import weather,light
 
 config_object = ConfigParser()
@@ -10,6 +13,8 @@ config_object.read("config.ini")
 
 monitorconfig = config_object["MONITORCONFIG"]
 prtgconfig = config_object["PRTGCONFIG"]
+
+port = serial.Serial(8, 19200, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE, timeout=5, rtscts=False)
 
 logtime = str.replace(str(time.time()), ".", "-")
 logging.basicConfig(filename="logfilename" + logtime + ".log", level=logging.INFO)
@@ -26,7 +31,11 @@ Data send interval: {} seconds
 PRTG Config
 """).format(logtime, monitorconfig["datasendinterval"])
 
-def get_values():
+async def get_values():
+    global temperature
+    global pressure
+    global amblight
+
     temperature = weather.temperature()
     pressure = round(weather.pressure(), 2)
     amblight = light.light()
@@ -53,6 +62,29 @@ def get_values():
         }
     }
     return json_response
+
+async def send_to_lcd(temp,press,ambientlight):
+    message1 = "Temperature: {}".format(temp)
+    message2 = "Pressure: {}".format(press)
+    message3 = "Light: {}".format(ambientlight)
+
+    clearscreen()
+    port.write(message1)
+    time.sleep(10)
+
+    clearscreen()
+    port.write(message2)
+    time.sleep(10)
+
+    clearscreen()
+    port.write(message3)
+    time.sleep(10)
+
+
+def clearscreen():
+    clearchars = [chr(254),chr(88)]
+    for i in clearchars:
+        port.write(i)
 
 try: 
     while True:
