@@ -13,6 +13,8 @@ If you find something that doesn't work:
 
 ## PRTG RaspberryPi Server Room Sensor
 
+##### This is intended for server rooms. Other rooms are fine
+
 ### Contains
 
 - Matrix Orbital LCD display support
