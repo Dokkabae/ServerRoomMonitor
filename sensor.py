@@ -5,11 +5,18 @@ import time
 import logging
 import serial
 import asyncio
+import sys
 from serial.serialutil import Timeout
 from envirophat import weather,light
 
 config_object = ConfigParser()
 config_object.read("config.ini")
+
+def config_read():
+    with open("config.ini", "rt") as config:
+        current_config = config.read()
+    return current_config
+
 
 monitorconfig = config_object["MONITORCONFIG"]
 prtgconfig = config_object["PRTGCONFIG"]
@@ -24,12 +31,9 @@ logging.info("""Starting Sensor
 Current Unix Epoch Time: 
 {}
 
-Current Config Settings:
-Monitor Config
-Data send interval: {} seconds
-
-PRTG Config
-""").format(logtime, monitorconfig["datasendinterval"])
+Current config.ini file:
+{}
+""").format(logtime, config_read())
 
 async def get_values():
     global temperature
@@ -92,7 +96,7 @@ try:
             json_response = get_values()
             json_string = str(json_response)
             json_string = str.replace(json_string, '\'', '\"')
-            prtg_request_URL = 'https://' + prtgconfig["prtgserverhost"] + ':' + prtgconfig["prtgserverport"] + '/' + prtgconfig["prtgsensortoken"] + "?content=" + json_string
+            prtg_request_URL = 'https://' + prtgconfig["prtgserverip"] + ':' + prtgconfig["prtgserverport"] + '/' + prtgconfig["prtgsensortoken"] + "?content=" + json_string
             if str(monitorconfig['debugenabled']) == '1':
                 logging.debug(json_response)
                 logging.debug(json_string)
