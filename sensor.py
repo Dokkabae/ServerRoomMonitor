@@ -17,6 +17,15 @@ def config_read():
         current_config = config.read()
     return current_config
 
+def check_config():
+    try: 
+        chkconfigdata = int(prtgconfig["datasendinterval"])
+
+    except:
+        logging.exception("datasendinterval cannot be a non integer!")
+        sys.exit()
+
+
 
 monitorconfig = config_object["MONITORCONFIG"]
 prtgconfig = config_object["PRTGCONFIG"]
