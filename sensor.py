@@ -1,10 +1,8 @@
 from configparser import ConfigParser
-import os
 import requests
 import time
 import logging
 import serial
-import asyncio
 import sys
 from serial.serialutil import Timeout
 from envirophat import weather,light
