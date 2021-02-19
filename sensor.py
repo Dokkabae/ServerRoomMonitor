@@ -85,13 +85,13 @@ port = serial.Serial(8, 19200, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOP
 logtime = str.replace(str(time.time()), ".", "-")
 logging.basicConfig(filename="logfilename" + logtime + ".log", level=logging.INFO)
 
-logging.info("\nStarting Sensor!\n"
-""
-"Current Unix Epoch Time: \n"
+logging.info("""\nStarting Sensor!
+
+Current Unix Epoch Time:
 {}
 
-"Current config.ini file: \n"
-{}).format(logtime, config_read())
+Current config.ini file:
+{}""").format(logtime, config_read())
 
 try: 
     while True:
