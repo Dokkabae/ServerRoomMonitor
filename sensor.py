@@ -10,6 +10,9 @@ from envirophat import weather,light
 config_object = ConfigParser()
 config_object.read("config.ini")
 
+
+####### Functions - Don't change these! #######
+
 def config_read():
     with open("config.ini", "rt") as config:
         current_config = config.read()
@@ -24,6 +27,7 @@ def check_config():
         sys.exit()
 
 def get_values():
+    # Creates the JSON values that are sent to PRTG
     global temperature
     global pressure
     global amblight
@@ -56,7 +60,7 @@ def get_values():
     return json_response
 
 def clearscreen():
-    clearchars = [chr(254),chr(88)]
+    clearchars = [chr(254),chr(88)] # God awful binary to clear the screen
     for i in clearchars:
         port.write(i)
 
@@ -77,10 +81,19 @@ def send_to_lcd(temp,press,ambientlight):
     port.write(message3)
     time.sleep(10)
 
+###############################################
+
 monitorconfig = config_object["MONITORCONFIG"]
 prtgconfig = config_object["PRTGCONFIG"]
 
 port = serial.Serial(8, 19200, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE, timeout=5, rtscts=False)
+
+# Baudrate
+# 8 Data Bits
+# No Parity
+# One Stop Bit
+# 5ms Timeout
+# No Flow Control
 
 logtime = str.replace(str(time.time()), ".", "-")
 logging.basicConfig(filename="logfilename" + logtime + ".log", level=logging.INFO)
